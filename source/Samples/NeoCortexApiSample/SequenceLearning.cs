@@ -137,7 +137,8 @@ namespace NeoCortexApiSample
             int cycle = 0;
             int matches = 0;
 
-            string lastPredictedValue = "0";
+            //string lastPredictedValue = "0";
+            List<String> lastPredictedValues = new List<string>();
 
             //Dictionary<double, List<List<int>>> activeColumnsLst = new Dictionary<double, List<List<int>>>();
 
@@ -237,13 +238,14 @@ namespace NeoCortexApiSample
                         Debug.WriteLine($"Col  SDR: {Helpers.StringifyVector(lyrOut.ActivColumnIndicies)}");
                         Debug.WriteLine($"Cell SDR: {Helpers.StringifyVector(actCells.Select(c => c.Index).ToArray())}");
 
-                        if (key == lastPredictedValue)
+                        //if (key == lastPredictedValue)
+                        if (lastPredictedValues.Contains(key))
                         {
                             matches++;
-                            Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValue}");
+                            Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues}");
                         }
                         else
-                            Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValue}");
+                            Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValues}");
 
                         if (lyrOut.PredictiveCells.Count > 0)
                         {
@@ -254,13 +256,15 @@ namespace NeoCortexApiSample
                             {
                                 Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {item}");
                             }
-                            
-                            lastPredictedValue = predictedInputValues.First().PredictedInput;
+
+                            //lastPredictedValue = predictedInputValues.First().PredictedInput;
+                            lastPredictedValues = predictedInputValues.Where(r => r.Similarity > 0.95).Select(r => r.PredictedInput).ToList();
                         }
                         else
                         {
                             Debug.WriteLine($"NO CELLS PREDICTED for next cycle.");
-                            lastPredictedValue = String.Empty;
+                            //lastPredictedValues = String.Empty;
+                            lastPredictedValues.Clear();
                         }
                     }
                 }
