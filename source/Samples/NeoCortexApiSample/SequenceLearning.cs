@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using NeoCortexApi;
 using NeoCortexApi.Classifiers;
 using NeoCortexApi.Encoders;
 using NeoCortexApi.Entities;
 using NeoCortexApi.Network;
-using NeoCortexApi.Utility;
 
 
 namespace NeoCortexApiSample
@@ -72,7 +69,7 @@ namespace NeoCortexApiSample
             // not stable with 2048 cols 25 cells per column and 0.02 * numColumns synapses on segment.
             // Stable with permanence decrement 0.25/ increment 0.15 and ActivationThreshold 25.
             // With increment=0.2 and decrement 0.3 has taken 15 min and didn't entered the stable state.
-            List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0});
+            List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 2.0, 3.0, 4.0, 3.0, 2.0 });
             //List<double> inputValues = new List<double>(new double[] { 6.0, 7.0, 8.0, 9.0, 10.0 });
 
             RunExperiment(inputBits, cfg, encoder, inputValues);
@@ -241,7 +238,7 @@ namespace NeoCortexApiSample
                         for(int b = 0; b<a; b++)
                         {
                             //if (key == lastPredictedValue)
-                            if (lastPredictedValues.Contains(key))
+                            if (key.Contains(lastPredictedValues[b]))
                             {
                                 matches++;
                                 Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
@@ -255,6 +252,8 @@ namespace NeoCortexApiSample
                         {
                             //var predictedInputValue = cls.GetPredictedInputValue(lyrOut.PredictiveCells.ToArray());
                             var predictedInputValues = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
+                            
+
 
                             foreach (var item in predictedInputValues)
                             {
