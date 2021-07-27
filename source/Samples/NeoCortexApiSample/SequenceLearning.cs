@@ -234,15 +234,20 @@ namespace NeoCortexApiSample
 
                         Debug.WriteLine($"Col  SDR: {Helpers.StringifyVector(lyrOut.ActivColumnIndicies)}");
                         Debug.WriteLine($"Cell SDR: {Helpers.StringifyVector(actCells.Select(c => c.Index).ToArray())}");
+
                         int a = lastPredictedValues.Count();
                         for(int b = 0; b<a; b++)
                         {
                             //if (key == lastPredictedValue)
                             if (key.Contains(lastPredictedValues[b]))
                             {
-                                matches++;
-                                Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
+                                if (lastPredictedValues[b] == key)
+                                {
+                                    matches++;
+                                    Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
+                                }
                             }
+                            
                             else
                                 Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
                         }
@@ -253,8 +258,6 @@ namespace NeoCortexApiSample
                             //var predictedInputValue = cls.GetPredictedInputValue(lyrOut.PredictiveCells.ToArray());
                             var predictedInputValues = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
                             
-
-
                             foreach (var item in predictedInputValues)
                             {
                                 Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {item}");
