@@ -128,7 +128,7 @@ namespace NeoCortexApiSample
             layer1.HtmModules.Add("encoder", encoder);
             layer1.HtmModules.Add("sp", sp);
 
-            double[] inputs = inputValues.ToArray();
+            double[] inputBit = inputValues.ToArray();
             int[] prevActiveCols = new int[0];
 
             int cycle = 0;
@@ -162,7 +162,7 @@ namespace NeoCortexApiSample
 
                 Debug.WriteLine($"-------------- Newborn Cycle {cycle} ---------------");
 
-                foreach (var input in inputs)
+                foreach (var input in inputBit)
                 {
                     Debug.WriteLine($" -- {input} --");
 
@@ -188,7 +188,7 @@ namespace NeoCortexApiSample
 
                 Debug.WriteLine($"-------------- Cycle {cycle} ---------------");
 
-                foreach (var input in inputs)
+                foreach (var input in inputBit)
                 {
                     Debug.WriteLine($"-------------- {input} ---------------");
 
@@ -236,35 +236,32 @@ namespace NeoCortexApiSample
                         Debug.WriteLine($"Cell SDR: {Helpers.StringifyVector(actCells.Select(c => c.Index).ToArray())}");
 
                         int a = lastPredictedValues.Count();
+
                         for(int b = 0; b<a; b++)
                         {
                             //if (key == lastPredictedValue)
-                            if (key.Contains(lastPredictedValues[b]))
+                            if (lastPredictedValues[b].Contains(key))
                             {
-                                if (lastPredictedValues[b] == key)
-                                {
-                                    matches++;
-                                    Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
-                                }
+                                matches++;
+                                Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
                             }
                             
                             else
                                 Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
                         }
-                        
 
                         if (lyrOut.PredictiveCells.Count > 0)
                         {
-                            //var predictedInputValue = cls.GetPredictedInputValue(lyrOut.PredictiveCells.ToArray());
                             var predictedInputValues = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
-                            
+
                             foreach (var item in predictedInputValues)
                             {
-                                Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {item}");
+                                lastPredictedValues = predictedInputValues.Where(r => r.Similarity > 0.95).Select(r => r.PredictedInput).ToList();
+                                //Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {Helpers.StringifyVector(lastPredictedValues.ToArray())}");
                             }
-
-                            //lastPredictedValue = predictedInputValues.First().PredictedInput;
-                            lastPredictedValues = predictedInputValues.Where(r => r.Similarity > 0.95).Select(r => r.PredictedInput).ToList();
+                            
+                            Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {Helpers.StringifyVector(lastPredictedValues.ToArray())}");
+                            //lastPredictedValues = predictedInputValues.Where(r => r.Similarity > 0.95).Select(r => r.PredictedInput).ToList();
                         }
                         else
                         {
@@ -275,12 +272,13 @@ namespace NeoCortexApiSample
                     }
                 }
 
+                tm.Reset(mem);
                 // The brain does not do that this way, so we don't use it.
                 // tm1.reset(mem);
 
-                double accuracy = (double)matches / (double)inputs.Length * 100.0;
+                double accuracy = (double)matches / (double)inputBit.Length * 100.0;
 
-                Debug.WriteLine($"Cycle: {cycle}\tMatches={matches} of {inputs.Length}\t {accuracy}%");
+                Debug.WriteLine($"Cycle: {cycle}\tMatches={matches} of {inputBit.Length}\t {accuracy}%");
 
                 if (accuracy == 100.0)
                 {
