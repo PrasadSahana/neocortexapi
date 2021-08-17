@@ -130,7 +130,7 @@ namespace NeoCortexApi.Classifiers
         /// <param name="predictiveCells"></param>
         /// <param name="howMany"></param>
         /// <returns></returns>
-        public List<ClassifierResult> GetPredictedInputValues(Cell[] predictiveCells, short howMany = 1)
+        public List<ClassifierResult> GetPredictedInputValues(Cell[] predictiveCells, short howMany)
         {
             List<ClassifierResult> res = new List<ClassifierResult>();
             double maxSameBits = 0;
@@ -154,10 +154,17 @@ namespace NeoCortexApi.Classifiers
                 {
                     if (pair.Value.SequenceEqual(celIndicies))
                     {
-                        Debug.WriteLine(
-                            $">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length}\tsimilarity 100pct\t {Helpers.StringifyVector(pair.Value)}");
+                        if (n == 0 || n == 1)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Debug.WriteLine(
+                                $">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length}\tsimilarity 100pct\t {Helpers.StringifyVector(pair.Value)}");
 
-                        res.Add(new ClassifierResult { PredictedInput = pair.Key, Similarity = (float)1.0, NumOfSameBits = pair.Value.Length });
+                            res.Add(new ClassifierResult { PredictedInput = pair.Key, Similarity = (float)1.0, NumOfSameBits = pair.Value.Length });
+                        }
                     }
                     else
                     {
