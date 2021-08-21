@@ -172,19 +172,20 @@ namespace NeoCortexApi.Classifiers
                         //double numOfSameBitsPct = (double)(((double)(pair.Value.Intersect(arr).Count()) / Math.Max(arr.Length, pair.Value.Count())));
                         //double numOfSameBitsPct = (double)(((double)(pair.Value.Intersect(celIndicies).Count()) / (double)pair.Value.Length));// ;
                         var numOfSameBitsPct = pair.Value.Intersect(celIndicies).Count();
-                        double simPercentage = Math.Round(MathHelpers.CalcArraySimilarity(pair.Value, celIndicies), 2);
+                        double simPercentage = Math.Round(MathHelpers.CalcArraySimilarity(pair.Value, celIndicies), 2); 
                         dict.Add(pair.Key, new ClassifierResult { PredictedInput = pair.Key, NumOfSameBits = numOfSameBitsPct, Similarity = simPercentage });
                         predictedList.Add(new KeyValuePair<double, string>(simPercentage, pair.Key.ToString()));
 
                         if (numOfSameBitsPct > maxSameBits)
                         {
-                            Debug.WriteLine($">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage} \t {Helpers.StringifyVector(pair.Value)}");
+                            //Debug.WriteLine($">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage} \t {Helpers.StringifyVector(pair.Value)}");
+                            Debug.WriteLine($">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {(numOfSameBitsPct/ pair.Value.Length)*100} \t {Helpers.StringifyVector(pair.Value)}");
                             maxSameBits = numOfSameBitsPct;
                             predictedValue = pair.Key;
                             indxOfMatchingInp = n;
                         }
                         else
-                            Debug.WriteLine($"<indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage}\t {Helpers.StringifyVector(pair.Value)}");
+                            Debug.WriteLine($"<indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {(numOfSameBitsPct / pair.Value.Length) * 100}\t {Helpers.StringifyVector(pair.Value)}");
                     }
                     n++;
                 }
