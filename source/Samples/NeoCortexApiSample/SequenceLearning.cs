@@ -294,6 +294,27 @@ namespace NeoCortexApiSample
                 }
             }
 
+            Debug.WriteLine("---- cell state trace ----");
+
+            cls.TraceState($"cellState_MinPctOverlDuty-{cfg.MinPctOverlapDutyCycles}_MaxBoost-{cfg.MaxBoost}.csv");
+
+            Debug.WriteLine("---- Spatial Pooler column state  ----");
+
+            foreach (var input in activeColumnsLst)
+            {
+                using (StreamWriter colSw = new StreamWriter($"ColumState_MinPctOverlDuty-{cfg.MinPctOverlapDutyCycles}_MaxBoost-{cfg.MaxBoost}_input-{input.Key}.csv"))
+                {
+                    Debug.WriteLine($"------------ {input.Key} ------------");
+
+                    foreach (var actCols in input.Value)
+                    {
+                        Debug.WriteLine(Helpers.StringifyVector(actCols.ToArray()));
+                        colSw.WriteLine(Helpers.StringifyVector(actCols.ToArray()));
+                    }
+                }
+            }
+
+            Debug.WriteLine("------------------------------- END -------------------------------");
         }
 
 
