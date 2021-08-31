@@ -22,13 +22,15 @@ namespace NeoCortexApiSample
             Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(SequenceLearning)}");
 
             int inputBits = 100;
-            int numColumns = 1024;
+            // All the Experiments are performed with 2048 Columns
+            int numColumns = 2048;
 
+            //Spatial Pooler Parameter Configuration using HtmConfig
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
                 Random = new ThreadSafeRandom(42),
 
-                CellsPerColumn = 30,
+                CellsPerColumn = 25,
                 GlobalInhibition = true,
                 LocalAreaDensity = -1,
                 NumActiveColumnsPerInhArea = 0.02 * numColumns,
@@ -67,11 +69,8 @@ namespace NeoCortexApiSample
 
             EncoderBase encoder = new ScalarEncoder(settings);
 
-            // not stable with 2048 cols 25 cells per column and 0.02 * numColumns synapses on segment.
-            // Stable with permanence decrement 0.25/ increment 0.15 and ActivationThreshold 25.
-            // With increment=0.2 and decrement 0.3 has taken 15 min and didn't entered the stable state.
-            List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
-            //List<double> inputValues = new List<double>(new double[] { 6.0, 7.0, 8.0, 9.0, 10.0 });
+            // Stable with PermanenceDecrement 0.25/PermanenceIncrement 0.15 and ActivationThreshold 25.
+            List<double> inputValues = new List<double>(new double[] { 6.0, 2.0, 3.0, 2.0, 5.0, 2.0, 6.0, 2.0, 6.0, 2.0, 5.0, 2.0, 3.0, 2.0, 3.0, 2.0, 5.0, 2.0 });
 
             RunExperiment(inputBits, cfg, encoder, inputValues);
         }
@@ -85,30 +84,28 @@ namespace NeoCortexApiSample
             sw.Start();
 
             int maxMatchCnt = 0;
+            // learn is always set to true during stable state
             bool learn = true;
 
             var mem = new Connections(cfg);
-
             bool isInStableState = false;
 
             HtmClassifier<string, ComputeCycle> cls = new HtmClassifier<string, ComputeCycle>();
 
             var numInputs = inputValues.Distinct<double>().ToList().Count;
 
-            CortexLayer<object, object> layer1 = new CortexLayer<object, object>("L1");
-
             TemporalMemory tm = new TemporalMemory();
 
-            HomeostaticPlasticityController hpa = new HomeostaticPlasticityController(mem, numInputs * 150, (isStable, numPatterns, actColAvg, seenInputs) =>
+            HomeostaticPlasticityController hpa = new HomeostaticPlasticityController(mem, numInputs * 155, (isStable, numPatterns, actColAvg, seenInputs) =>
             {
                 if (isStable)
                     // Event should be fired when entering the stable state.
                     Debug.WriteLine($"STABLE: Patterns: {numPatterns}, Inputs: {seenInputs}, iteration: {seenInputs / numPatterns}");
                 else
-                    // Ideal SP should never enter unstable state after stable state.
+                    // Ideal Spatial Pooler should never enter unstable state after stable state.
                     Debug.WriteLine($"INSTABLE: Patterns: {numPatterns}, Inputs: {seenInputs}, iteration: {seenInputs / numPatterns}");
 
-                // We are not learning in instable state.
+                // learning should be set to false during instable state
                 learn = isInStableState = isStable;
 
                 //if (isStable && layer1.HtmModules.ContainsKey("tm") == false)
@@ -118,42 +115,41 @@ namespace NeoCortexApiSample
                 cls.ClearState();
 
                 // Clear active and predictive cells.
-                //tm.Reset(mem);
-            }, numOfCyclesToWaitOnChange: 50);
+                tm.Reset(mem);
 
+            }, numOfCyclesToWaitOnChange: 25);
 
             SpatialPoolerMT sp = new SpatialPoolerMT(hpa);
             sp.Init(mem);
             tm.Init(mem);
 
+            CortexLayer<object, object> layer1 = new CortexLayer<object, object>("L1");
+
             layer1.HtmModules.Add("encoder", encoder);
             layer1.HtmModules.Add("sp", sp);
 
-            double[] inputBit = inputValues.ToArray();
+            double[] inputs = inputValues.ToArray();
             int[] prevActiveCols = new int[0];
 
             int cycle = 0;
             int matches = 0;
 
-            //string lastPredictedValue = "0";
-            List<String> lastPredictedValues = new List<string>();
+            string lastPredictedValue = "0";
 
-            //Dictionary<double, List<List<int>>> activeColumnsLst = new Dictionary<double, List<List<int>>>();
+            Dictionary<double, List<List<int>>> activeColumnsLst = new Dictionary<double, List<List<int>>>();
 
-            //foreach (var input in inputs)
-            //{
-            //    if (activeColumnsLst.ContainsKey(input) == false)
-            //        activeColumnsLst.Add(input, new List<List<int>>());
-            //}
+            foreach (var input in inputs)
+            {
+                if (activeColumnsLst.ContainsKey(input) == false)
+                    activeColumnsLst.Add(input, new List<List<int>>());
+            }
 
             int maxCycles = 3500;
             int maxPrevInputs = inputValues.Count - 1;
             List<string> previousInputs = new List<string>();
             previousInputs.Add("-1.0");
 
-            //
-            // Training SP to get stable. New-born stage.
-            //
+            // Training Spatial Pooler to get stable during New-born stage.
 
             for (int i = 0; i < maxCycles; i++)
             {
@@ -163,7 +159,7 @@ namespace NeoCortexApiSample
 
                 Debug.WriteLine($"-------------- Newborn Cycle {cycle} ---------------");
 
-                foreach (var input in inputBit)
+                foreach (var input in inputs)
                 {
                     Debug.WriteLine($" -- {input} --");
 
@@ -172,14 +168,14 @@ namespace NeoCortexApiSample
                     if (isInStableState)
                         break;
                 }
-
                 if (isInStableState)
                     break;
             }
 
             layer1.HtmModules.Add("tm", tm);
+
             //
-            // Now training with SP+TM. SP is pretrained on the given input pattern set.
+            // Now training with SP+TM. SP is already pretrained on the given input pattern set.
             for (int i = 0; i < maxCycles; i++)
             {
                 matches = 0;
@@ -188,7 +184,7 @@ namespace NeoCortexApiSample
 
                 Debug.WriteLine($"-------------- Cycle {cycle} ---------------");
 
-                foreach (var input in inputBit)
+                foreach (var input in inputs)
                 {
                     Debug.WriteLine($"-------------- {input} ---------------");
 
@@ -207,7 +203,7 @@ namespace NeoCortexApiSample
                             previousInputs.RemoveAt(0);
 
                         // In the pretrained SP with HPC, the TM will quickly learn cells for patterns
-                        // In that case the starting sequence 4-5-6 might have the sam SDR as 1-2-3-4-5-6,
+                        // In that case the starting sequence 4-5-6 might have the same SDR as 1-2-3-4-5-6,
                         // Which will result in returning of 4-5-6 instead of 1-2-3-4-5-6.
                         // HtmClassifier allways return the first matching sequence. Because 4-5-6 will be as first
                         // memorized, it will match as the first one.
@@ -235,58 +231,47 @@ namespace NeoCortexApiSample
                         Debug.WriteLine($"Col  SDR: {Helpers.StringifyVector(lyrOut.ActivColumnIndicies)}");
                         Debug.WriteLine($"Cell SDR: {Helpers.StringifyVector(actCells.Select(c => c.Index).ToArray())}");
 
-                        int a = lastPredictedValues.Count();
-
-                        for (int b = 0; b < a; b++)
+                        if (key == lastPredictedValue)
                         {
-                            //if (key == lastPredictedValue)
-                            if (lastPredictedValues[b].Contains(key))
-                            {
-                                matches++;
-                                Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
-                            }
-
-                            else
-                                Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValues[b]}");
-                                //continue;
+                            matches++;
+                            Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValue}");
                         }
-
+                        else
+                            Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValue}");
 
                         if (lyrOut.PredictiveCells.Count > 0)
                         {
-                            var predictedInputValues = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
+                            // The below line of code picks top 3 Predictions from Index list based on Similarity Percentage
+                            var predictedInputValue = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
+                            Debug.WriteLine($"Current Input: {input}");
 
-                            foreach (var item in predictedInputValues)
+                            foreach (var item in predictedInputValue)
                             {
-                                lastPredictedValues = predictedInputValues.Where(r => r.Similarity > 0.20).Select(r => r.PredictedInput).ToList();
-                                //Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {Helpers.StringifyVector(lastPredictedValues.ToArray())}");
+                                // We are filtering the values to pick top 3 predictions with Similarity >= 50%
+                                if (item.Similarity >= (double)50.00 && item.PredictedInput.Contains("-1.0") == false)
+                                {
+                                    Debug.WriteLine($"Predicted Input: {item.PredictedInput}");
+                                }
                             }
 
-                            Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {Helpers.StringifyVector(lastPredictedValues.ToArray())}");
-                            //lastPredictedValues = predictedInputValues.Where(r => r.Similarity > 0.95).Select(r => r.PredictedInput).ToList();
-
+                            lastPredictedValue = predictedInputValue.First().PredictedInput;
                         }
                         else
                         {
                             Debug.WriteLine($"NO CELLS PREDICTED for next cycle.");
-                            //lastPredictedValues = String.Empty;
-                            lastPredictedValues.Clear();
+                            lastPredictedValue = String.Empty;
                         }
                     }
-
                 }
 
-                tm.Reset(mem);
                 // The brain does not do that this way, so we don't use it.
-                // tm1.reset(mem);
+                //tm.Reset(mem);
 
+                double accuracy = (double)matches / (double)inputs.Length * 100.0;
 
-                double accuracy = (double)matches / (double)inputBit.Length * 100.0;
+                Debug.WriteLine($"Cycle: {cycle}\tMatches={matches} of {inputs.Length}\t {accuracy}%");
 
-                Debug.WriteLine($"Cycle: {cycle}\tMatches={matches} of {inputBit.Length}\t {accuracy}%");
-
-                //if (accuracy == 1/ inputValues.Count * 100.0)
-                if (accuracy >= 90.0)
+                if (accuracy == 100.0)
                 {
                     maxMatchCnt++;
                     Debug.WriteLine($"100% accuracy reached {maxMatchCnt} times.");
@@ -294,9 +279,7 @@ namespace NeoCortexApiSample
                     // Experiment is completed if we are 30 cycles long at the 100% accuracy.
                     if (maxMatchCnt >= 30)
                     {
-                        //cls.TraceState();
                         sw.Stop();
-
                         Debug.WriteLine($"Exit experiment in the stable state after 30 repeats with 100% of accuracy. Elapsed time: {sw.ElapsedMilliseconds / 1000 / 60} min.");
                         learn = false;
                         break;
@@ -304,12 +287,13 @@ namespace NeoCortexApiSample
                 }
                 else if (maxMatchCnt > 0)
                 {
+                    // If there is drop in accuracy then TM has forgotten learnt patterns and it starts learning new pattern of SDRs again
+                    // Drop in accuracy should not happen usually.
                     Debug.WriteLine($"At 100% accuracy after {maxMatchCnt} repeats we get a drop of accuracy with {accuracy}. This indicates instable state. Learning will be continued.");
                     maxMatchCnt = 0;
                 }
             }
 
-            Debug.WriteLine("------------ END ------------");
         }
 
 
