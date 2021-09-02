@@ -154,37 +154,33 @@ namespace NeoCortexApi.Classifiers
                 {
                     if (pair.Value.SequenceEqual(celIndicies))
                     {
-                        if (n == 0 || n == 1)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            var numOfSameBitsPct = pair.Value.Intersect(celIndicies).Count();
-                            Debug.WriteLine($">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length}, Same Bits = {numOfSameBitsPct}\t, similarity 100pct\t {Helpers.StringifyVector(pair.Value)}");
+                        var numOfSameBitsPct = pair.Value.Intersect(celIndicies).Count();
+                        double simPercentage = Math.Round(MathHelpers.CalcArraySimilarity(pair.Value, celIndicies), 2);
+                        Debug.WriteLine(
+                            $">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage} \t {Helpers.StringifyVector(pair.Value)}");
 
-                            res.Add(new ClassifierResult { PredictedInput = pair.Key, Similarity = (float)1.0, NumOfSameBits = pair.Value.Length });
-                        }
+                        res.Add(new ClassifierResult { PredictedInput = pair.Key, Similarity = simPercentage, NumOfSameBits = pair.Value.Length });
                     }
                     else
                     {
-                        // Tried following:
-                        //double numOfSameBitsPct = (double)(((double)(pair.Value.Intersect(arr).Count()) / Math.Max(arr.Length, pair.Value.Count())));
-                        //double numOfSameBitsPct = (double)(((double)(pair.Value.Intersect(celIndicies).Count()) / (double)pair.Value.Length));// ;
+                        //  Tried following:
+                        //  double numOfSameBitsPct = (double)(((double)(pair.Value.Intersect(arr).Count()) / Math.Max(arr.Length, pair.Value.Count())));
+                        //  double numOfSameBitsPct = (double)(((double)(pair.Value.Intersect(celIndicies).Count()) / (double)pair.Value.Length));// ;
                         var numOfSameBitsPct = pair.Value.Intersect(celIndicies).Count();
-                        double simPercentage = Math.Round(MathHelpers.CalcArraySimilarity(pair.Value, celIndicies), 2); 
+                        double simPercentage = Math.Round(MathHelpers.CalcArraySimilarity(pair.Value, celIndicies), 2);
                         dict.Add(pair.Key, new ClassifierResult { PredictedInput = pair.Key, NumOfSameBits = numOfSameBitsPct, Similarity = simPercentage });
                         predictedList.Add(new KeyValuePair<double, string>(simPercentage, pair.Key.ToString()));
-
-                        if (numOfSameBitsPct > maxSameBits)
+                        if (simPercentage >= (float)50.0)
                         {
-                            Debug.WriteLine($">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage} \t {Helpers.StringifyVector(pair.Value)}");
+                            {
+                                Debug.WriteLine($">indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage} \t {Helpers.StringifyVector(pair.Value)}");
+                            }
                             maxSameBits = numOfSameBitsPct;
                             predictedValue = pair.Key;
                             indxOfMatchingInp = n;
                         }
                         else
-                            Debug.WriteLine($"<indx:{n}\tinp/len: {pair.Key}/{pair.Value.Length} ,Same Bits = {numOfSameBitsPct}\t, Similarity% {simPercentage}\t {Helpers.StringifyVector(pair.Value)}");
+                            continue;
                     }
                     n++;
                 }
@@ -194,7 +190,7 @@ namespace NeoCortexApi.Classifiers
             foreach (var keyPair in dict.Values.OrderByDescending(key => key.Similarity))
             {
                 res.Add(keyPair);
-                if (++cnt >= howMany)
+                if (++cnt > howMany)
                     break;
             }
 
@@ -276,7 +272,6 @@ namespace NeoCortexApi.Classifiers
                     predictedValue = pair.Value;
                     indxOfMatchingInp = n;
                 }
-
                 //if (maxSameBits > 0.9)
                 //{
                 //    sortedMatches.Add(n);
@@ -284,29 +279,23 @@ namespace NeoCortexApi.Classifiers
                 //    // For example: Let the matchin input be i1
                 //    // I1 - c1, c2, c3, c4
                 //    // I2 - c1, c2, c3, c4, c5, c6
-
                 //    Debug.WriteLine($"cnt:{n}\t{pair.Value} = bits {numOfSameBitsPct}\t {Helpers.StringifyVector(pair.Key)}");
                 //}
             }
             n++;
         }
-
         foreach (var item in sortedMatches)
         {
-
         }
-
         Debug.Write("[ ");
         for (int i = Math.Max(0, indxOfMatchingInp - 3); i < Math.Min(indxOfMatchingInp + 3, this.activeMap.Keys.Count); i++)
         {
             if (i == indxOfMatchingInp) Debug.Write("* ");
             Debug.Write($"{this.inputSequence[i]}");
             if (i == indxOfMatchingInp) Debug.Write(" *");
-
             Debug.Write(", ");
         }
         Debug.WriteLine(" ]");
-
         return predictedValue;
         //return activeMap[ComputeHash(FlatArray(output))];
     }
@@ -373,35 +362,27 @@ namespace NeoCortexApi.Classifiers
     /// </summary>
     public void TraceState2(string fileName = null)
     {
-
         List<TIN> processedValues = new List<TIN>();
-
         foreach (var item in activeMap.Values)
         {
             if (processedValues.Contains(item) == false)
             {
                 StreamWriter sw = null;
-
                 if (fileName != null)
                     sw = new StreamWriter(fileName.Replace(".csv", $"_Digit_{item}.csv"));
-
                 Debug.WriteLine("");
                 Debug.WriteLine($"{item}");
-
                 foreach (var inp in this.activeMap.Where(i => EqualityComparer<TIN>.Default.Equals((TIN)i.Value, item)))
                 {
                     Debug.WriteLine($"{Helpers.StringifyVector(inp.Key)}");
-
                     if (sw != null)
                         sw.WriteLine($"{Helpers.StringifyVector(inp.Key)}");
                 }
-
                 if (sw != null)
                 {
                     sw.Flush();
                     sw.Close();
                 }
-
                 processedValues.Add(item);
             }
         }
