@@ -69,8 +69,48 @@ namespace NeoCortexApiSample
 
             EncoderBase encoder = new ScalarEncoder(settings);
 
+            //  Attains 100% Accuracy (30 times) at Cycle 262, without any instability. Which means that the learnt SDRs are never forgotten and cell SDRs remain same throughout.
+            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 5.0, 2.0, 8.0, 2.0, 7.0, 2.0, 5.0, 2.0, 13.0, 2.0, 12.0, 2.0, 9.0, 2.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 271, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 396, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 1.0, 2.0, 3.0, 2.0, 3.0, 4.0, 3.0, 4.0, 5.0, 4.0, 5.0, 6.0, 5.0, 6.0, 7.0, 6.0, 7.0, 8.0, 7.0, 8.0, 9.0, 8.0, 9.0, 0.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 179, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 4.0, 3.0, 4.0, 2.0, 5.0, 3.0, 5.0, 4.0, 5.0, 3.0, 6.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 231, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 3.0, 4.0, 1.0, 2.0, 3.0, 5.0, 2.0, 5.0, 3.0, 6.0, 7.0, 4.0, 3.0, 7.0, 1.0, 9.0, 3.0, 11.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 205, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0, 13.0, 12.0, 11.0, 12.0, 13.0, 14.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 231, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 4.0, 5.0, 2.0, 6.0, 7.0, 3.0, 8.0, 2.0, 8.0, 9.0, 10.0, 2.0, 11 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 171, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 2.0, 11.0, 9.0, 2.0, 8.0, 6.0, 2.0, 3.0, 2.0, 9.0, 3.0, 2.0, 1.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 196, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 4.0, 5.0, 6.0, 2.0, 7.0, 2.0, 8.0, 2.0, 3.0, 6.0, 2.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 204, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 3.0, 4.0, 2.0, 5.0, 6.0, 2.0, 7.0, 8.0, 2.0, 9.0, 10.0, 11.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 205, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 1.0, 0.0, 2.0, 1.0, 3.0, 0.0, 4.0, 1.0, 5.0, 0.0, 5.0, 6.0, 1.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 213, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 0.0, 2.0, 1.0, 2.0, 3.0, 2.0, 4.0, 2.0, 5.0, 2.0, 6.0, 2.0, 7.0, 2.0, 8.0, 2.0, 9.0, 2.0, 10.0 });
+
+            //  Attains 100% Accuracy (30 times) at Cycle 296, without any instability.
+            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 1.0, 4.0, 3.0, 2.0, 5.0, 3.0, 7.0, 2.0, 9.0, 3.0, 11.0, 2.0 });
+
+
             // Stable with PermanenceDecrement 0.25/PermanenceIncrement 0.15 and ActivationThreshold 25.
-            List<double> inputValues = new List<double>(new double[] { 6.0, 2.0, 3.0, 2.0, 5.0, 2.0, 6.0, 2.0, 6.0, 2.0, 5.0, 2.0, 3.0, 2.0, 3.0, 2.0, 5.0, 2.0 });
+            List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
 
             RunExperiment(inputBits, cfg, encoder, inputValues);
         }
@@ -265,7 +305,7 @@ namespace NeoCortexApiSample
                 }
 
                 // The brain does not do that this way, so we don't use it.
-                //tm.Reset(mem);
+                //tm1.Reset(mem);
 
                 double accuracy = (double)matches / (double)inputs.Length * 100.0;
 
