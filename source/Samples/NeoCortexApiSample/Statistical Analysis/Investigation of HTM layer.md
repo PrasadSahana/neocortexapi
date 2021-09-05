@@ -8,5 +8,7 @@ Initially after the research it was found that SDRs can be forgotten during the 
 ### What were the problems in layer L4 of SP + TM?
 
 During the research it was found that after SP gets stable in New-born stage ([See the link](https://github.com/ddobric/neocortexapi/blob/htm-serialization/source/Documentation/Experiments/ICPRAM_2021_76_CR.pdf)), TM is not stable. This means that layer L4 gets stable in SP (by using Homeostatic Plasticity Controller), unfortunately the TM in same layer do not get stable. The below SDR visualization result shows that same image in different cycles change the SDR code.
-![Comparison of SDRs with 5 consecutive cycles][C:/Users/prana/Desktop/Picture1.png]
+![][Image1]
+
+[Image1]: ./Desktop/Picture1.png
 
