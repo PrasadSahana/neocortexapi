@@ -97,7 +97,7 @@ Now, we need to visualize this learnt SDRs to check for any instability. The bel
 
 Hence, we can conclude that there are absolutely no instability caused during learning process of Cell SDR patterns.
 
-### How did we generate Visualized SDRs?
+### 2.	How did we generate Visualized SDRs?
 
 The Column/Cell activity of SDRs can be generated using the python script draw_figure.py which is located in the below mentioned link.
 
