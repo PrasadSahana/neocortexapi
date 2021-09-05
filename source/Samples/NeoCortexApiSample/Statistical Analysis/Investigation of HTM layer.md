@@ -92,7 +92,7 @@ Now, we need to visualize this learnt SDRs to check for any instability. The bel
 
 ![][img0.1]
 
-[img0.1]: ./Visualized SDR Comparison/SDR_Comparison_Sequence_1_Stable.JPG
+[img0.1]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_1_Stable.JPG
 
 
 Hence, we can conclude that there are absolutely no instability caused during learning process of Cell SDR patterns.
