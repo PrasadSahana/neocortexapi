@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Statistical Analysis\Input Sequence Learning\" />
     <Folder Include="Statistical Analysis\Visualized SDR Comparison\" />
   </ItemGroup>
 
