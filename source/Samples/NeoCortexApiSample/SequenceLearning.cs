@@ -159,7 +159,7 @@ namespace NeoCortexApiSample
 
             }, numOfCyclesToWaitOnChange: 25);
 
-            SpatialPoolerMT sp = new SpatialPoolerMT(hpa);
+            SpatialPooler sp = new SpatialPooler(hpa);
             sp.Init(mem);
             tm.Init(mem);
 
