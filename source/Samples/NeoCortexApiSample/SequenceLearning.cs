@@ -69,11 +69,11 @@ namespace NeoCortexApiSample
 
             EncoderBase encoder = new ScalarEncoder(settings);
 
-            // Attains Accuracy >90% (30 times) at Cycle 262, without any instability. Which means that the learnt SDRs are never forgotten and cell SDRs remain same throughout.
-            // List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 5.0, 2.0, 8.0, 2.0, 7.0, 2.0, 5.0, 2.0, 13.0, 2.0, 12.0, 2.0, 9.0, 2.0 }); //Pending
+            // Attains Accuracy 93,75% (30 times) at Cycle 242, without any instability. Which means that the learnt SDRs are never forgotten and cell SDRs remain same throughout.
+            // List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 4.0, 2.0, 5.0, 2.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 10.0, 9.0, 8.0, 7.0 });
 
-            // Attains Accuracy 97,75% (30 times) at Cycle 242, without any instability. Pending
-            List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 4.0, 3.0, 5.0, 6.0, 9.0, 10.0, 11.0, 12.0 });
+            // Attains Accuracy 97,75% (30 times) at Cycle 242, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 4.0, 3.0, 5.0, 6.0, 9.0, 10.0, 11.0, 12.0 });
 
             // Attains Accuracy 95,83% (30 times) at Cycle 245, without any instability.
             // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 0.0, 3.0, 2.0, 4.0, 5.0, 4.0, 6.0, 5.0, 6.0, 7.0, 6.0, 7.0, 8.0, 7.0, 9.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0 });
@@ -110,7 +110,7 @@ namespace NeoCortexApiSample
 
 
             // Stable with PermanenceDecrement 0.25/PermanenceIncrement 0.15 and ActivationThreshold 25.
-            // List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
+            List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
 
             RunExperiment(inputBits, cfg, encoder, inputValues);
         }
