@@ -22,10 +22,10 @@ namespace NeoCortexApiSample
             Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(SequenceLearning)}");
 
             int inputBits = 100;
-            // All the Experiments are performed with 2048 Columns
+            // All the Experiments are performed with 2048 Columns.
             int numColumns = 2048;
 
-            //Spatial Pooler Parameter Configuration using HtmConfig
+            // Spatial Pooler Parameter Configuration using HtmConfig.
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
                 Random = new ThreadSafeRandom(42),
@@ -69,48 +69,48 @@ namespace NeoCortexApiSample
 
             EncoderBase encoder = new ScalarEncoder(settings);
 
-            //  Attains 100% Accuracy (30 times) at Cycle 262, without any instability. Which means that the learnt SDRs are never forgotten and cell SDRs remain same throughout.
-            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 5.0, 2.0, 8.0, 2.0, 7.0, 2.0, 5.0, 2.0, 13.0, 2.0, 12.0, 2.0, 9.0, 2.0 });
+            // Attains Accuracy >90% (30 times) at Cycle 262, without any instability. Which means that the learnt SDRs are never forgotten and cell SDRs remain same throughout.
+            // List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 5.0, 2.0, 8.0, 2.0, 7.0, 2.0, 5.0, 2.0, 13.0, 2.0, 12.0, 2.0, 9.0, 2.0 }); //Pending
 
-            //  Attains 100% Accuracy (30 times) at Cycle 271, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
+            // Attains Accuracy 97,75% (30 times) at Cycle 242, without any instability. Pending
+            List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 4.0, 3.0, 5.0, 6.0, 9.0, 10.0, 11.0, 12.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 396, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 1.0, 2.0, 3.0, 2.0, 3.0, 4.0, 3.0, 4.0, 5.0, 4.0, 5.0, 6.0, 5.0, 6.0, 7.0, 6.0, 7.0, 8.0, 7.0, 8.0, 9.0, 8.0, 9.0, 0.0 });
+            // Attains Accuracy 95,83% (30 times) at Cycle 245, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 0.0, 3.0, 2.0, 4.0, 5.0, 4.0, 6.0, 5.0, 6.0, 7.0, 6.0, 7.0, 8.0, 7.0, 9.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 179, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 4.0, 3.0, 4.0, 2.0, 5.0, 3.0, 5.0, 4.0, 5.0, 3.0, 6.0 });
+            // Attains Accuracy 92,85% (30 times) at Cycle 180, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 2.0, 4.0, 3.0, 4.0, 2.0, 5.0, 3.0, 5.0, 4.0, 5.0, 3.0, 6.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 231, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 3.0, 4.0, 1.0, 2.0, 3.0, 5.0, 2.0, 5.0, 3.0, 6.0, 7.0, 4.0, 3.0, 7.0, 1.0, 9.0, 3.0, 11.0 });
+            // Attains Accuracy 95% (30 times) at Cycle 201, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 3.0, 4.0, 1.0, 2.0, 3.0, 5.0, 2.0, 5.0, 3.0, 6.0, 7.0, 4.0, 3.0, 7.0, 1.0, 9.0, 3.0, 11.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 205, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0, 13.0, 12.0, 11.0, 12.0, 13.0, 14.0 });
+            // Attains Accuracy 94,44% (30 times) at Cycle 178, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0, 13.0, 12.0, 11.0, 12.0, 13.0, 14.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 231, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 4.0, 5.0, 2.0, 6.0, 7.0, 3.0, 8.0, 2.0, 8.0, 9.0, 10.0, 2.0, 11 });
+            // Attains Accuracy 93,75% (30 times) at Cycle 227, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 0.0, 1.0, 3.0, 4.0, 5.0, 2.0, 6.0, 7.0, 3.0, 8.0, 2.0, 8.0, 3.0, 9.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 171, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 2.0, 11.0, 9.0, 2.0, 8.0, 6.0, 2.0, 3.0, 2.0, 9.0, 3.0, 2.0, 1.0 });
+            // Attains Accuracy 92,30% (30 times) at Cycle 242, without any instability
+            // List<double> inputValues = new List<double>(new double[] { 2.0, 11.0, 9.0, 2.0, 8.0, 6.0, 2.0, 3.0, 2.0, 9.0, 3.0, 2.0, 1.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 196, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 2.0, 3.0, 4.0, 5.0, 6.0, 2.0, 7.0, 2.0, 8.0, 2.0, 3.0, 6.0, 2.0 });
+            // Attains Accuracy 93,33% (30 times) at Cycle 221, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 3.0, 7.0, 2.0, 8.0, 2.0, 3.0, 6.0, 2.0, 0.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 204, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 3.0, 4.0, 2.0, 5.0, 6.0, 2.0, 7.0, 8.0, 2.0, 9.0, 10.0, 11.0 });
+            // Attains Accuracy 91,66% (30 times) at Cycle 223, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 3.0, 4.0, 2.0, 5.0, 6.0, 2.0, 7.0, 8.0, 2.0, 9.0, 10.0, 11.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 205, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 1.0, 0.0, 2.0, 1.0, 3.0, 0.0, 4.0, 1.0, 5.0, 0.0, 5.0, 6.0, 1.0 });
+            // Attains Accuracy 92,30% (30 times) at Cycle 205, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 0.0, 2.0, 1.0, 3.0, 0.0, 4.0, 1.0, 5.0, 0.0, 5.0, 6.0, 1.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 213, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 0.0, 2.0, 1.0, 2.0, 3.0, 2.0, 4.0, 2.0, 5.0, 2.0, 6.0, 2.0, 7.0, 2.0, 8.0, 2.0, 9.0, 2.0, 10.0 });
+            // Attains Accuracy 95% (30 times) at Cycle 214, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 4.0, 2.0, 5.0, 2.0, 6.0, 2.0, 7.0, 2.0, 8.0, 2.0, 9.0, 2.0, 10.0 });
 
-            //  Attains 100% Accuracy (30 times) at Cycle 296, without any instability.
-            //  List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 1.0, 4.0, 3.0, 2.0, 5.0, 3.0, 7.0, 2.0, 9.0, 3.0, 11.0, 2.0 });
+            // Attains Accuracy 93,33% (30 times) at Cycle 233, without any instability.
+            // List<double> inputValues = new List<double>(new double[] { 1.0, 2.0, 3.0, 1.0, 4.0, 3.0, 2.0, 5.0, 3.0, 7.0, 2.0, 9.0, 3.0, 11.0, 2.0 });
 
 
             // Stable with PermanenceDecrement 0.25/PermanenceIncrement 0.15 and ActivationThreshold 25.
-            List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
+            // List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
 
             RunExperiment(inputBits, cfg, encoder, inputValues);
         }
@@ -145,7 +145,7 @@ namespace NeoCortexApiSample
                     // Ideal Spatial Pooler should never enter unstable state after stable state.
                     Debug.WriteLine($"INSTABLE: Patterns: {numPatterns}, Inputs: {seenInputs}, iteration: {seenInputs / numPatterns}");
 
-                // learning should be set to false during instable state
+                // learning should be set to false during instable state.
                 learn = isInStableState = isStable;
 
                 //if (isStable && layer1.HtmModules.ContainsKey("tm") == false)
@@ -214,7 +214,6 @@ namespace NeoCortexApiSample
 
             layer1.HtmModules.Add("tm", tm);
 
-            //
             // Now training with SP+TM. SP is already pretrained on the given input pattern set.
             for (int i = 0; i < maxCycles; i++)
             {
@@ -231,7 +230,7 @@ namespace NeoCortexApiSample
                     var lyrOut = layer1.Compute(input, learn) as ComputeCycle;
 
                     // lyrOut is null when the TM is added to the layer inside of HPC callback by entering of the stable state.
-                    //if (isInStableState && lyrOut != null)
+                    // If (isInStableState && lyrOut != null)
                     {
                         var activeColumns = layer1.GetResult("sp") as int[];
 
@@ -243,10 +242,8 @@ namespace NeoCortexApiSample
                             previousInputs.RemoveAt(0);
 
                         // In the pretrained SP with HPC, the TM will quickly learn cells for patterns
-                        // In that case the starting sequence 4-5-6 might have the same SDR as 1-2-3-4-5-6,
-                        // Which will result in returning of 4-5-6 instead of 1-2-3-4-5-6.
-                        // HtmClassifier allways return the first matching sequence. Because 4-5-6 will be as first
-                        // memorized, it will match as the first one.
+                        // In that case the starting sequence 4-5-6 might have the same SDR as 1-2-3-4-5-6, which will result in returning of 4-5-6 instead of 1-2-3-4-5-6.
+                        // HtmClassifier allways return the first matching sequence. Because 4-5-6 will be as first memorized, it will match as the first one.
                         if (previousInputs.Count < maxPrevInputs)
                             continue;
 
@@ -271,56 +268,30 @@ namespace NeoCortexApiSample
                         Debug.WriteLine($"Col  SDR: {Helpers.StringifyVector(lyrOut.ActivColumnIndicies)}");
                         Debug.WriteLine($"Cell SDR: {Helpers.StringifyVector(actCells.Select(c => c.Index).ToArray())}");
 
-                        if (key == lastPredictedValue)
-                        {
-                            matches++;
-                            Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValue}");
-                        }
-                        else
-                            Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValue}");
-
-                        if (lyrOut.PredictiveCells.Count > 0)
-                        {
-                            // The below line of code picks top 3 Predictions from Index list based on Similarity Percentage
-                            var predictedInputValue = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
-                            Debug.WriteLine($"Current Input: {input}");
-
-                            foreach (var item in predictedInputValue)
-                            {
-                                // We are filtering the values to pick top 3 predictions with Similarity >= 50%
-                                if (item.Similarity >= (double)50.00 && item.PredictedInput.Contains("-1.0") == false)
-                                {
-                                    Debug.WriteLine($"Predicted Input: {item.PredictedInput}");
-                                }
-                            }
-
-                            lastPredictedValue = predictedInputValue.First().PredictedInput;
-                        }
-                        else
-                        {
-                            Debug.WriteLine($"NO CELLS PREDICTED for next cycle.");
-                            lastPredictedValue = String.Empty;
-                        }
+                        int count = match(key, lastPredictedValue, matches);
+                        lastPredictedValue = Calc(key, layer1, cls, input, lyrOut);
+                       
+                        matches = count;
                     }
                 }
 
-                // The brain does not do that this way, so we don't use it.
-                //tm1.Reset(mem);
+                // We need to add the below line in order to make the learning faster, even though it will not be able to predict the very first element.
+                tm.Reset(mem);
 
-                double accuracy = (double)matches / (double)inputs.Length * 100.0;
+                double accuracy = (double)matches / (double)inputs.Length * 100;
 
-                Debug.WriteLine($"Cycle: {cycle}\tMatches={matches} of {inputs.Length}\t {accuracy}%");
+                Debug.WriteLine($"Cycle: {cycle}\t Matches={matches} of {inputs.Length}\t accuracy {accuracy}%");
 
-                if (accuracy == 100.0)
+                if (accuracy >= 90.0)
                 {
                     maxMatchCnt++;
-                    Debug.WriteLine($"100% accuracy reached {maxMatchCnt} times.");
-                    //
-                    // Experiment is completed if we are 30 cycles long at the 100% accuracy.
+                    Debug.WriteLine($"Accuracy {accuracy}% reached: {maxMatchCnt} times.");
+
+                    // Experiment is completed if we are 30 cycles long at accuracy >= 90%.
                     if (maxMatchCnt >= 30)
                     {
                         sw.Stop();
-                        Debug.WriteLine($"Exit experiment in the stable state after 30 repeats with 100% of accuracy. Elapsed time: {sw.ElapsedMilliseconds / 1000 / 60} min.");
+                        Debug.WriteLine($"Exit experiment in the stable state after 30 repeats with {accuracy}% of accuracy. Elapsed time: {sw.ElapsedMilliseconds / 1000 / 60} min.");
                         learn = false;
                         break;
                     }
@@ -329,7 +300,7 @@ namespace NeoCortexApiSample
                 {
                     // If there is drop in accuracy then TM has forgotten learnt patterns and it starts learning new pattern of SDRs again
                     // Drop in accuracy should not happen usually.
-                    Debug.WriteLine($"At 100% accuracy after {maxMatchCnt} repeats we get a drop of accuracy with {accuracy}. This indicates instable state. Learning will be continued.");
+                    Debug.WriteLine($"At {accuracy} accuracy after {maxMatchCnt} repeats we get a drop of accuracy with {accuracy}. This indicates instable state. Learning will be continued.");
                     maxMatchCnt = 0;
                 }
             }
@@ -357,6 +328,46 @@ namespace NeoCortexApiSample
             Debug.WriteLine("------------------------------- END -------------------------------");
         }
 
+        public int match(string key, string lastPredictedValue, int matches)
+        {
+            if (key == lastPredictedValue)
+            {
+                matches++;
+                Debug.WriteLine($"Match. Actual value: {key} - Predicted value: {lastPredictedValue}");
+            }
+            else
+                Debug.WriteLine($"Missmatch! Actual value: {key} - Predicted value: {lastPredictedValue}");
+
+            return matches;
+        }
+
+        public string Calc(string key, CortexLayer<object, object> layer1, HtmClassifier<string, ComputeCycle> cls, double input, ComputeCycle lyrOut)
+        {
+            string lastPredictedValue = "0";
+
+            if (lyrOut.PredictiveCells.Count > 0)
+            {
+                // The below line of code picks top 3 Predictions from Index list based on Similarity Percentage
+                var predictedInputValue = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
+
+                foreach (var item in predictedInputValue)
+                {
+                    // We are filtering the values to pick top 3 predictions with Similarity >= 50%
+                    if (item.Similarity >= (double)50.00 && item.PredictedInput.Contains("-1.0") == false)
+                    {
+                        Debug.WriteLine($"Current Input: {input}, Predicted Input: {item.PredictedInput}, Similarity %: {item.Similarity}");
+                    }
+                }
+                // We are displaying the first Predicted input of top 3 Predictions.
+                lastPredictedValue = predictedInputValue.First().PredictedInput;
+            }
+            else
+            {
+                Debug.WriteLine($"NO CELLS PREDICTED for next cycle.");
+                lastPredictedValue = String.Empty;
+            }
+            return lastPredictedValue;
+        }
 
         private static string GetKey(List<string> prevInputs, double input)
         {
