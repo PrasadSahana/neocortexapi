@@ -114,13 +114,12 @@ Consider the following cell state trace generated for input sequence shown above
 Cell state trace SDR1/2/3/4/5 is always the last 5 cycle's Cell SDR of input sequence. For example, In this case they represent Cell SDR from cycle 169 to cycle 173.
 Once the experiment is complete, we need to visualize this learnt SDRs to check for any instability. The below result shows visual representation of SDR1/2/3/4/5 for the above mentioned input sequence.
 
-|`Input Sequence`|`0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4`|`1-2-3-1-4-3-2-5-3-7-2-9-3-11-2`|`2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11`|
+|```Input Sequence```|```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```|```1-2-3-1-4-3-2-5-3-7-2-9-3-11-2```|
 |--|--|--|--|--|
-|Cell SDR|![][img0.1]|![][img0.2]|![][img0.4]|
+|Cell SDR|![][img0.1]|![][img0.2]|
 
 [img0.1]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_1_Stable.JPG
 [img0.2]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_2_Stable.JPG
-[img17.4]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_4_Stable.JPG
 
 
 We observe that these visualized Cell SDRs are same for all the 5 cycles and there is no difference in the pattern observed. 
