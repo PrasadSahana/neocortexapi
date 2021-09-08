@@ -13,8 +13,6 @@ A new version of HTM classifier was introduced which implemented the following m
 	public List<ClassifierResult> GetPredictedInputValues(Cell[] predictiveCells, short howMany)
 ```
 
-Hence the SequenceLearning.cs has a new method:
-
 ```csharp
 	var predictedInputValue = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
                 foreach (var item in predictedInputValue)
@@ -100,7 +98,8 @@ Once the TM learns SDR patterns completely, then accuracy (30 times) is reached.
                 }
 ```
 
-Consider the following cell state trace generated for input sequence: 
+Consider the following cell state trace generated for input sequence:
+
     a) ```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```
 
 ```
@@ -124,6 +123,7 @@ Consider the following cell state trace generated for input sequence:
 23765, 23858, 23936, 23999, 24067, 24355, 24391, 24555, 24831, 24940, 25011, 25036, 25340, 25617, 25805, 26190, 26223, 26297, 26478, 26746, 26992, 27160, 27253, 27772, 27826, 28417, 28621, 28723, 28968, 29285, 29349, 29427, 29470, 29614, 29631, 29736, 30090, 30333, 30886, 31215, 			
 ```
 
+
 Cell state trace(SDR1/2/3/4/5) is always the last 5 cycle's Cell SDR. For example, In this case input sequence a) represents Cell SDR from cycle 169 to cycle 173 whereas input sequence b) represents Cell SDR from cycle 197 to cycle 201.
 Once the experiment is completed, we plot this learnt SDRs to check for any instability. The below result shows visual representation-
 
@@ -135,7 +135,7 @@ Once the experiment is completed, we plot this learnt SDRs to check for any inst
 [img0.4]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_4_Stable.JPG
 
 
-We observe from these two examples that, these Cell SDRs are same for all the 5 cycles and that there is no difference in the pattern. 
+We observe from these two examples that, Cell SDRs are same for all the 5 cycles and that there is no difference in the pattern. 
 Further Cell SDR plots can be found [here](./Visualized%20SDR%20Comparison)
 ### 3.	How did we generate Visualized SDRs?
 
