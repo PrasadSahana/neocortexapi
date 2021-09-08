@@ -7,11 +7,12 @@ Initially after the research it was found that SDRs can be forgotten during the 
 
 ### How stability was achieved in the class ‘SequenceLearning.cs’ of layer L4  SP + TM? 
 
-A new version of HTM classifier was introduced which implemented the following method as follows:
+A new version of HTM classifier was introduced as follows:
 
 ```csharp
 	public List<ClassifierResult> GetPredictedInputValues(Cell[] predictiveCells, short howMany)
 ```
+where
 
 ```csharp
 	var predictedInputValue = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
@@ -80,7 +81,7 @@ Predicted Input: 4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6
 
 ### 2.	Observation of visualized cell SDRs:
 
-Once the TM learns SDR patterns completely, then accuracy (30 times) is reached. A method is added in our code to generate ‘cell state trace’ so that statistical analysis can be done. This helps to compare column/cell activity.
+Once the TM learns SDR patterns completely, then accuracy (30 times) is reached. Following method generates ‘cell state trace’ so that statistical analysis can be done. This helps to compare column/cell activity.
 
 ```csharp
     foreach (var input in activeColumnsLst)
@@ -124,7 +125,7 @@ Consider the following cell state trace generated for input sequence:
 ```
 
 
-Cell state trace(SDR1/2/3/4/5) is always the last 5 cycle's Cell SDR. For example, In this case input sequence a) represents Cell SDR from cycle 169 to cycle 173 whereas input sequence b) represents Cell SDR from cycle 197 to cycle 201.
+Cell state trace(SDR1/2/3/4/5) is always the last 5 cycle's Cell SDR. For example, In this case input sequence a) represents cell SDR from cycle 169 to cycle 173 whereas input sequence b) represents cell SDR from cycle 197 to cycle 201.
 Once the experiment is completed, we plot this learnt SDRs to check for any instability. The below result shows visual representation-
 
 |```Input Sequence```||```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```||```2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11```|
@@ -135,8 +136,8 @@ Once the experiment is completed, we plot this learnt SDRs to check for any inst
 [img0.4]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_4_Stable.JPG
 
 
-We observe from these two examples that, Cell SDRs are same for all the 5 cycles and that there is no difference in the pattern. 
-Further Cell SDR plots can be found [here](./Visualized%20SDR%20Comparison)
+We observe from these two examples that, cell SDRs are same for all the 5 cycles and that there is no difference in the pattern. 
+Further cell SDR plots can be found [here](./Visualized%20SDR%20Comparison)
 ### 3.	How did we generate Visualized SDRs?
 
 The Column/Cell activity of SDRs can be generated using the python script draw_figure.py which is located in the below mentioned link.
