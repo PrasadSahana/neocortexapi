@@ -125,7 +125,7 @@ Consider the following cell state trace generated for input sequence:
 ```
 
 
-Cell state trace(SDR1/2/3/4/5) is always the last 5 cycle's Cell SDR. For example, In this case input sequence a) represents cell SDR from cycle 169 to cycle 173 whereas input sequence b) represents cell SDR from cycle 197 to cycle 201.
+Cell state trace(SDR1/2/3/4/5) is generated uniquely for every index values during the learning process. It is always the last 5 cycle's Cell SDR. For example, In this case input sequence a) represents cell SDR from cycle 169 to cycle 173 whereas input sequence b) represents cell SDR from cycle 197 to cycle 201.
 Once the experiment is completed, we plot this learnt SDRs to check for any instability. The below result shows visual representation-
 
 |```Input Sequence```||```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```||```2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11```|
