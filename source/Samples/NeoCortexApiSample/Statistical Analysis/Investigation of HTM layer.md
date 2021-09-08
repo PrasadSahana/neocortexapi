@@ -100,7 +100,9 @@ Once the TM learns SDR patterns completely, then accuracy (30 times) is reached.
                 }
 ```
 
-Consider the following cell state trace generated for input sequence shown above.
+Consider the following cell state trace generated for input sequence: 
+    a) ```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```
+
 ```
 ---- cell state trace ----	
 0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4
@@ -110,21 +112,31 @@ Consider the following cell state trace generated for input sequence shown above
 7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
 7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
 ```
+    b) ```2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11```
 
-Cell state trace SDR1/2/3/4/5 is always the last 5 cycle's Cell SDR of input sequence. For example, In this case they represent Cell SDR from cycle 169 to cycle 173.
-Once the experiment is complete, we need to visualize this learnt SDRs to check for any instability. The below result shows visual representation of SDR1/2/3/4/5 for the above mentioned input sequence.
+```
+---- cell state trace ----	
+2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11			
+23765, 23858, 23936, 23999, 24067, 24355, 24391, 24555, 24831, 24940, 25011, 25036, 25340, 25617, 25805, 26190, 26223, 26297, 26478, 26746, 26992, 27160, 27253, 27772, 27826, 28417, 28621, 28723, 28968, 29285, 29349, 29427, 29470, 29614, 29631, 29736, 30090, 30333, 30886, 31215, 			
+23765, 23858, 23936, 23999, 24067, 24355, 24391, 24555, 24831, 24940, 25011, 25036, 25340, 25617, 25805, 26190, 26223, 26297, 26478, 26746, 26992, 27160, 27253, 27772, 27826, 28417, 28621, 28723, 28968, 29285, 29349, 29427, 29470, 29614, 29631, 29736, 30090, 30333, 30886, 31215, 			
+23765, 23858, 23936, 23999, 24067, 24355, 24391, 24555, 24831, 24940, 25011, 25036, 25340, 25617, 25805, 26190, 26223, 26297, 26478, 26746, 26992, 27160, 27253, 27772, 27826, 28417, 28621, 28723, 28968, 29285, 29349, 29427, 29470, 29614, 29631, 29736, 30090, 30333, 30886, 31215, 			
+23765, 23858, 23936, 23999, 24067, 24355, 24391, 24555, 24831, 24940, 25011, 25036, 25340, 25617, 25805, 26190, 26223, 26297, 26478, 26746, 26992, 27160, 27253, 27772, 27826, 28417, 28621, 28723, 28968, 29285, 29349, 29427, 29470, 29614, 29631, 29736, 30090, 30333, 30886, 31215, 			
+23765, 23858, 23936, 23999, 24067, 24355, 24391, 24555, 24831, 24940, 25011, 25036, 25340, 25617, 25805, 26190, 26223, 26297, 26478, 26746, 26992, 27160, 27253, 27772, 27826, 28417, 28621, 28723, 28968, 29285, 29349, 29427, 29470, 29614, 29631, 29736, 30090, 30333, 30886, 31215, 			
+```
 
-|```Input Sequence```||```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```||```1-2-3-1-4-3-2-5-3-7-2-9-3-11-2```||```2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11```|
+Cell state trace(SDR1/2/3/4/5) is always the last 5 cycle's Cell SDR. For example, In this case input sequence a) represents Cell SDR from cycle 169 to cycle 173 whereas input sequence b) represents Cell SDR from cycle 197 to cycle 201.
+Once the experiment is completed, we plot this learnt SDRs to check for any instability. The below result shows visual representation-
 
-![][img0.1]|![][img0.2]|![][img0.4]|
+|```Input Sequence```||```0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4```||```2-3-3-4-1-2-3-5-2-5-3-6-7-4-3-7-1-9-3-11```|
+
+![][img0.1] ![][img0.4]
 
 [img0.1]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_1_Stable.JPG
-[img0.2]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_2_Stable.JPG
 [img0.4]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_4_Stable.JPG
 
 
-We observe that these visualized Cell SDRs are same for all the 5 cycles and there is no difference in the pattern observed. 
-
+We observe from these two examples that, these Cell SDRs are same for all the 5 cycles and that there is no difference in the pattern. 
+Further Cell SDR plots can be found [here](./Visualized%20SDR%20Comparison)
 ### 3.	How did we generate Visualized SDRs?
 
 The Column/Cell activity of SDRs can be generated using the python script draw_figure.py which is located in the below mentioned link.
