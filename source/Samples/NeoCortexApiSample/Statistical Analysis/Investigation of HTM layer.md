@@ -17,6 +17,14 @@ Hence the SequenceLearning.cs has a new method:
 
 ```csharp
 	var predictedInputValue = cls.GetPredictedInputValues(lyrOut.PredictiveCells.ToArray(), 3);
+                foreach (var item in predictedInputValue)
+                {
+                    if (item.Similarity >= (double)50.00 && item.PredictedInput.Contains("-1.0") == false)
+                    {
+                        Debug.WriteLine($"Current Input: {input}, Predicted Input: {item.PredictedInput}, Similarity %: {item.Similarity}");
+                    }
+                }
+                lastPredictedValue = predictedInputValue.First().PredictedInput;
 ```
 
 This method retrieves top 3 predicted values from the list having Similarity >= 50%. Apart from that there was also drop in the accuracy during learning process, which started producing new set of cell SDRs again.
@@ -29,7 +37,8 @@ Consider an example input sequence as follows:
 	List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
 ```
 
-So, when this input sequence starts learning, then SP gets stable in New-born stage. After the New-born stage, TM starts learning cell SDRs in order to attain accuracy >90%. During initial stages of learning process, the Similarity % may not be high as shown below.
+When this input sequence starts learning, then SP gets stable in New-born stage. After the New-born stage, TM starts learning cell SDRs in order to attain accuracy >90%. During initial stages of learning process, the Similarity % may not be high as shown below.
+
 
 ```
 -------------- Cycle 161 ---------------						
@@ -73,24 +82,43 @@ Predicted Input: 4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6
 
 ### 2.	Observation of visualized cell SDRs:
 
-Once the TM learns SDR patterns completely, then accuracy (30 times) is reached. A method is added in our code to generate ‘cell state trace’ so that statistical analysis can be done. This helps to compare column/cell activity. Consider the 5 SDRs generated for sequence shown above.
+Once the TM learns SDR patterns completely, then accuracy (30 times) is reached. A method is added in our code to generate ‘cell state trace’ so that statistical analysis can be done. This helps to compare column/cell activity.
 
+```csharp
+    foreach (var input in activeColumnsLst)
+                {
+                    using (StreamWriter colSw = new StreamWriter($"ColumState_MinPctOverlDuty-{cfg.MinPctOverlapDutyCycles}_MaxBoost-{cfg.MaxBoost}_input-{input.Key}.csv"))
+                    {
+                        Debug.WriteLine($"------------ {input.Key} ------------");
+
+                        foreach (var actCols in input.Value)
+                        {
+                            Debug.WriteLine(Helpers.StringifyVector(actCols.ToArray()));
+                            colSw.WriteLine(Helpers.StringifyVector(actCols.ToArray()));
+                        }
+                    }
+                }
+```
+
+Consider the following cell state trace generated for input sequence shown above.
 ```
 ---- cell state trace ----	
-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4						
-12235, 12326, 12362, 12392, 12459, 12672, 13228, 14345, 14497, 15106, 15379, 15431, 15486, 15585, 15608, 15671, 15679, 15758, 15883, 15904, 15936, 15996, 16037, 16145, 16233, 16303, 16370, 16490, 16605, 16887, 16984, 17099, 17140, 17209, 17299, 17499, 17528, 17572, 17786, 18386, 						
-12235, 12326, 12362, 12392, 12459, 12672, 13228, 14345, 14497, 15106, 15379, 15431, 15486, 15585, 15608, 15671, 15679, 15758, 15883, 15904, 15936, 15996, 16037, 16145, 16233, 16303, 16370, 16490, 16605, 16887, 16984, 17099, 17140, 17209, 17299, 17499, 17528, 17572, 17786, 18386, 						
-12235, 12326, 12362, 12392, 12459, 12672, 13228, 14345, 14497, 15106, 15379, 15431, 15486, 15585, 15608, 15671, 15679, 15758, 15883, 15904, 15936, 15996, 16037, 16145, 16233, 16303, 16370, 16490, 16605, 16887, 16984, 17099, 17140, 17209, 17299, 17499, 17528, 17572, 17786, 18386, 						
-12235, 12326, 12362, 12392, 12459, 12672, 13228, 14345, 14497, 15106, 15379, 15431, 15486, 15585, 15608, 15671, 15679, 15758, 15883, 15904, 15936, 15996, 16037, 16145, 16233, 16303, 16370, 16490, 16605, 16887, 16984, 17099, 17140, 17209, 17299, 17499, 17528, 17572, 17786, 18386, 						
-12235, 12326, 12362, 12392, 12459, 12672, 13228, 14345, 14497, 15106, 15379, 15431, 15486, 15585, 15608, 15671, 15679, 15758, 15883, 15904, 15936, 15996, 16037, 16145, 16233, 16303, 16370, 16490, 16605, 16887, 16984, 17099, 17140, 17209, 17299, 17499, 17528, 17572, 17786, 18386, 						
+0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4
+7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
+7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
+7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
+7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
+7594, 8438, 8532, 8638, 9209, 9367, 9631, 9688, 10242, 10262, 10854, 10914, 11303, 11485, 12086, 12519, 12660, 14266, 14377, 14457, 14580, 15102, 15551, 15630, 15738, 15767, 16009, 16052, 16124, 16155, 16474, 16548, 16714, 16725, 16829, 16934, 17044, 17199, 17247, 17767, 			
 ```
 
-Once the experiment is complete, we need to visualize this learnt SDRs to check for any instability. The below result shows visual representation of SDR1/2/3/4/5 of the above mentioned sequence.
+Cell state trace SDR1/2/3/4/5 is the last 5 cycle's Cell SDR of input sequence. For example, In this case they represent Cell SDR from cycle 169 - 173.
+Once the experiment is complete, we need to visualize this learnt SDRs to check for any instability. The below result shows visual representation of SDR1/2/3/4/5 for the above mentioned input sequence.
 
 ![][img0.1]
 
 [img0.1]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_1_Stable.JPG
 
+We observe that these visualized cell SDRs are same for all the 5 cycles and there is no difference in the pattern observed.
 
 ### 3.	How did we generate Visualized SDRs?
 
