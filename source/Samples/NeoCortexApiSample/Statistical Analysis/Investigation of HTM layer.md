@@ -2,13 +2,8 @@
 
 ### What is HTM layer instability?
 
-Hierarchical Temporal Memory (HTM) is designed in such a way that it can learn the pattern and generate Sparse Distributed Representation (SDR) of the input quickly . 
+Hierarchical Temporal Memory (HTM) is designed in such a way that it can learn the patterns and generate Sparse Distributed Representation (SDR) of the input quickly . 
 Initially after the research it was found that SDRs can be forgotten during the training progress and this caused SP to learn same patterns again, which generated new set of SDRs. This instable learning behavior of SP was because of internal boosting algorithm by Homeostatic Plasticity Mechanism. ([See the link)](https://github.com/ddobric/neocortexapi/blob/htm-serialization/source/Documentation/Experiments/ICPRAM_2021_76_CR.pdf)
-
-### What were the problems in layer L4 of SP + TM?
-
-During the research it was found that after SP gets stable in New-born stage ([See the link](https://github.com/ddobric/neocortexapi/blob/htm-serialization/source/Documentation/Experiments/ICPRAM_2021_76_CR.pdf)), TM is not stable. This means that layer L4 gets stable in SP (by using Homeostatic Plasticity Controller), unfortunately the TM in same layer do not get stable. The SDR visualization result in the above link ([See the link](https://github.com/PrasadSahana/neocortexapi/blob/master/source/Documentation/images/sdr-compare.png)) shows that same image in different cycles change the SDR Pattern.
-It is observed that Cell SDRs of the same sequence key were changing over time even if SP was stable. SP being stable means that **Column SDRs do not change anymore**, but it stops changing after the TM (Cell SDRs) gets stable. For this to happen, all patterns must attain 100% accuracy without any change in Cell/Column SDRs. Hence, the stability check was implemented in the class ‘SequenceLearning.cs’.
 
 ### How stability was achieved in the class ‘SequenceLearning.cs’ of layer L4  SP + TM? 
 
@@ -34,47 +29,49 @@ Consider an example input sequence as follows:
 	List<double> inputValues = new List<double>(new double[] { 0.0, 1.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 5.0, 4.0, 3.0, 7.0, 1.0, 9.0, 12.0, 11.0, 12.0, 13.0, 14.0, 11.0, 12.0, 14.0, 5.0, 7.0, 6.0, 9.0, 3.0, 4.0, 3.0, 4.0, 3.0, 4.0 });
 ```
 
-So, when this input sequence starts learning, then SP gets stable in New-born stage. After the New-born stage, TM starts learning cell SDRs in order to attain 100% accuracy. During initial stages of learning process, the Similarity % may not be 100 as shown below.
+So, when this input sequence starts learning, then SP gets stable in New-born stage. After the New-born stage, TM starts learning cell SDRs in order to attain accuracy >90%. During initial stages of learning process, the Similarity % may not be high as shown below.
 
 ```
--------------- Cycle 259 ---------------						
--------------- 0 ---------------						
-						
-Active segments: 40, Matching segments: 40						
-Col  SDR: 83, 84, 87, 99, 147, 148, 156, 158, 161, 176, 231, 237, 250, 253, 258, 262, 268, 280, 282, 283, 285, 293, 297, 302, 305, 313, 316, 317, 320, 322, 323, 324, 326, 335, 336, 338, 341, 345, 377, 383, 						
-Cell SDR: 2091, 2110, 2188, 2488, 3682, 3700, 3907, 3967, 4042, 4406, 5789, 5928, 6269, 6342, 6457, 6558, 6702, 7009, 7069, 7080, 7149, 7330, 7438, 7561, 7634, 7825, 7916, 7926, 8007, 8053, 8088, 8100, 8165, 8391, 8418, 8469, 8548, 8640, 9433, 9582, 						
-Match. Actual value: 1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0 - Predicted value: 1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0						
-Item length: 40	 Items: 34					
-Predictive cells: 40 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 					
->indx:0	inp/len: 0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1/40 ,Same Bits = 40	, Similarity% 100 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 			
->indx:1	inp/len: 9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6/40 ,Same Bits = 39	, Similarity% 97,5 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7997, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 			
->indx:2  inp/len: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3/40 ,Same Bits = 39	, Similarity% 97,5 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9275, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 				
-Current Input: 0						
-Predicted Input: 0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1						
-Predicted Input: 9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6						
-Predicted Input: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3
+-------------- Cycle 161 ---------------						
+-------------- 6 ---------------			
+			
+Active segments: 40, Matching segments: 40			
+Col  SDR: 503, 543, 546, 570, 575, 615, 618, 638, 674, 681, 698, 717, 725, 730, 745, 746, 750, 772, 774, 777, 778, 788, 799, 801, 834, 846, 853, 856, 860, 863, 871, 874, 875, 882, 883, 891, 893, 894, 900, 915, 			
+Cell SDR: 12583, 13598, 13656, 14256, 14384, 15389, 15469, 15966, 16858, 17036, 17461, 17931, 18144, 18262, 18625, 18651, 18768, 19323, 19367, 19434, 19461, 19712, 19982, 20029, 20853, 21174, 21345, 21413, 21521, 21585, 21795, 21867, 21879, 22061, 22093, 22299, 22342, 22357, 22510, 22876, 			
+Match. Actual value: 5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6 - Predicted value: 5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6			
+Item length: 40	 Items: 34		
+Predictive cells: 40 	 10653, 10861, 10906, 11480, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15267, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17890, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863, 		
+>indx:0	inp/len: 4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5/40 ,Same Bits = 40	, Similarity% 100 	 10653, 10861, 10906, 11480, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15267, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17890, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863, 
+>indx:1	inp/len: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3/40 ,Same Bits = 36	, Similarity% 90 	 10653, 10861, 10906, 11480, 12499, 12669, 13011, 13651, 14100, 14270, 14390, 15265, 15647, 15963, 16538, 16673, 16743, 17043, 17471, 17479, 17525, 17757, 17890, 18021, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863,
+>indx:2	inp/len: 4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3/40 ,Same Bits = 36	, Similarity% 90 	 10653, 10861, 10906, 11476, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15264, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17888, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19318, 19351, 19435, 19491, 19718, 19751, 19785, 19863,
+Current Input: 6			
+Predicted Input: 4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5    Similarity %: 100	
+Predicted Input: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3    Similarity %: 90
+Predicted Input: 4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3    Similarity %: 90		
 ```
 
-However, as learning continues, Similarity % also increases and eventually it attains 100%.	It is also interesting to note thatduring learning process one pattern leads to another pattern and so on.
+However, as learning continues, Similarity % also increases and eventually it attains the required accuracy. It is also interesting to note that during learning process one pattern leads to another pattern and so on.
 
 ```
--------------- Cycle 271 ---------------						
--------------- 0 ---------------						
-						
-Active segments: 40, Matching segments: 40						
-Col  SDR: 83, 84, 87, 99, 147, 148, 156, 158, 161, 176, 231, 237, 250, 253, 258, 262, 268, 280, 282, 283, 285, 293, 297, 302, 305, 313, 316, 317, 320, 322, 323, 324, 326, 335, 336, 338, 341, 345, 377, 383, 						
-Cell SDR: 2091, 2110, 2188, 2488, 3682, 3700, 3907, 3967, 4042, 4406, 5789, 5928, 6269, 6342, 6457, 6558, 6702, 7009, 7069, 7080, 7149, 7330, 7438, 7561, 7634, 7825, 7916, 7926, 8007, 8053, 8088, 8100, 8165, 8391, 8418, 8469, 8548, 8640, 9433, 9582, 						
-Match. Actual value: 1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0 - Predicted value: 1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0						
-Item length: 40	 Items: 34					
-Predictive cells: 40 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 					
->indx:0	inp/len: 0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1/40 ,Same Bits = 40	, Similarity% 100 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 			
->indx:1	inp/len: 9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6/40 ,Same Bits = 40	, Similarity% 100 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 			
->indx:2	inp/len: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3/40 ,Same Bits = 40	, Similarity% 100 	 4449, 5898, 6021, 6570, 7052, 7129, 7443, 7625, 7835, 7898, 7928, 7971, 8022, 8143, 8159, 8342, 8388, 8415, 8471, 8545, 8645, 8888, 8907, 8929, 8967, 8983, 9228, 9315, 9405, 9426, 9598, 9620, 9648, 9993, 10034, 10085, 10543, 10744, 10880, 11567, 			
-Current Input: 0						
-Predicted Input: 0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1						
-Predicted Input: 9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6						
-Predicted Input: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-2-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3
+-------------- Cycle 173 ---------------						
+-------------- 6 ---------------			
+			
+Active segments: 40, Matching segments: 40			
+Col  SDR: 503, 543, 546, 570, 575, 615, 618, 638, 674, 681, 698, 717, 725, 730, 745, 746, 750, 772, 774, 777, 778, 788, 799, 801, 834, 846, 853, 856, 860, 863, 871, 874, 875, 882, 883, 891, 893, 894, 900, 915, 			
+Cell SDR: 12583, 13598, 13656, 14256, 14384, 15389, 15469, 15966, 16858, 17036, 17461, 17931, 18144, 18262, 18625, 18651, 18768, 19323, 19367, 19434, 19461, 19712, 19982, 20029, 20853, 21174, 21345, 21413, 21521, 21585, 21795, 21867, 21879, 22061, 22093, 22299, 22342, 22357, 22510, 22876, 			
+Match. Actual value: 5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6 - Predicted value: 5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6			
+Item length: 40	 Items: 34		
+Predictive cells: 40 	 10653, 10861, 10906, 11480, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15267, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17890, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863, 		
+>indx:0	inp/len: 4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5/40 ,Same Bits = 40	, Similarity% 100 	 10653, 10861, 10906, 11480, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15267, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17890, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863, 
+>indx:1	inp/len: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3/40 ,Same Bits = 40	, Similarity% 100 	 10653, 10861, 10906, 11480, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15267, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17890, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863,
+>indx:2	inp/len: 4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3/40 ,Same Bits = 40	, Similarity% 100 	 10653, 10861, 10906, 11480, 12500, 12669, 13011, 13651, 14100, 14270, 14390, 15267, 15647, 15963, 16538, 16673, 16743, 17046, 17471, 17479, 17525, 17757, 17890, 18025, 18184, 18479, 18543, 18580, 18679, 18873, 18944, 19218, 19319, 19351, 19435, 19491, 19718, 19751, 19785, 19863,
+Current Input: 6			
+Predicted Input: 4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3-4-3-4-0-1-0-2-3-4-5-6-5    Similarity %: 100	
+Predicted Input: 4-3-4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3    Similarity %: 100
+Predicted Input: 4-3-4-0-1-0-2-3-4-5-6-5-4-3-7-1-9-12-11-12-13-14-11-12-14-5-7-6-9-3-4-3    Similarity %: 100		
 ```
+
+### 2.	Observation of visualized cell SDRs:
 
 Once the TM learns SDR patterns completely, then accuracy (30 times) is reached. A method is added in our code to generate ‘cell state trace’ so that statistical analysis can be done. This helps to compare column/cell activity. Consider the 5 SDRs generated for sequence shown above.
 
@@ -88,17 +85,20 @@ Once the TM learns SDR patterns completely, then accuracy (30 times) is reached.
 12235, 12326, 12362, 12392, 12459, 12672, 13228, 14345, 14497, 15106, 15379, 15431, 15486, 15585, 15608, 15671, 15679, 15758, 15883, 15904, 15936, 15996, 16037, 16145, 16233, 16303, 16370, 16490, 16605, 16887, 16984, 17099, 17140, 17209, 17299, 17499, 17528, 17572, 17786, 18386, 						
 ```
 
-Now, we need to visualize this learnt SDRs to check for any instability. The below result shows visual representation of SDR1/2/3/4/5 of the above mentioned sequence.
+Once the experiment is complete, we need to visualize this learnt SDRs to check for any instability. The below result shows visual representation of SDR1/2/3/4/5 of the above mentioned sequence.
 
 ![][img0.1]
 
 [img0.1]: ./Visualized%20SDR%20Comparison/SDR_Comparison_Sequence_1_Stable.JPG
 
 
-Hence, we can conclude that there are absolutely no instability caused during learning process of Cell SDR patterns.
-
-### 2.	How did we generate Visualized SDRs?
+### 3.	How did we generate Visualized SDRs?
 
 The Column/Cell activity of SDRs can be generated using the python script draw_figure.py which is located in the below mentioned link.
 
 [See the link](https://github.com/PrasadSahana/neocortexapi/blob/master/Python/ColumnActivityDiagram/draw_figure.py)
+
+Following linux command can be run on VS terminal to generate the visualized SDRs:
+```
+py draw_figure.py -fn "CDS_FILE_WITH_SDRs" -gn "OUTPUT_FILENAME" -mc NUM-OF-ROWS-TO-PROCESS -ht THRESHOLDLINE-OPTIONAL -yt "Y_AXIS_TITLE" -xt "X_AXIS_TITLE" -st "SDR1/SDR2/SDR3/SDR4/SDR5" -fign NOTUSED
+```
