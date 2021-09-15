@@ -1,4 +1,4 @@
-﻿# Investigation of HTM layer instability in HTM
+﻿# Investigation of HTM layer stability
 
 ### What is HTM layer instability?
 
